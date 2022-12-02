@@ -3,6 +3,39 @@
 #include <string.h>
 #include "common.h"
 
+char** allocStringArray(int numStrings) {
+	char** retArray;
+	int i;
+
+	retArray = (char**) calloc(numStrings, sizeof(char*));
+
+	if (retArray==NULL) {
+		printf("ERROR ALLOCATING STRING\n");;
+	}
+	else {
+		for (i=0; i<numStrings; i++) {
+			retArray[i] = (char*) calloc(50, sizeof(char));
+			if (retArray[i]==NULL) {
+				printf("ERROR ALLOCATING STRING\n");
+				freeStringArray(retArray, numStrings);
+				break;
+			}
+		}
+	}
+	
+	return retArray;
+}
+
+void freeStringArray(char** sArray, int numStrings) {
+	int i;
+
+	for (i=0; i<numStrings; i++) {
+		free(sArray[i]);
+	}
+
+	free(sArray);
+}
+
 int parseIntLine(char* line, int length, int* outBuffer) {
 	int i, j = 0;
 	int numInts = 0;
@@ -73,4 +106,54 @@ int pushTop3(int top3[3], int num) {
 	}
 
 	return pos;
+}
+
+
+int parseCharLine(char* line, int length, char** outBuffer) {
+	int i, j = 0;
+	int numChars = 0;
+	char snippet[1000];
+
+	for (i=0; i<=length; i++) {
+		if (line[i]==' ' || line[i]=='\n' || i==length) {
+			if (j!=0) {
+				snippet[j] = '\0';
+				strcpy(outBuffer[numChars], snippet);
+				numChars++;
+				j = 0;
+			}
+		}
+		else {
+			snippet[j] = line[i];
+			j++;
+		}
+	}
+
+	return numChars;
+}
+
+int parseCharFile(char* fileName, char** outBuffer[MAX_FILE_LINES],
+	       int numChars[MAX_FILE_LINES]) {
+	FILE* fileHandler;
+	char currentLine[1000];
+	int numRecords = 0;
+
+	fileHandler = fopen(fileName, "r");
+
+	if (fileHandler!=NULL) {
+		while (fgets(currentLine, 1000, fileHandler) != NULL) {
+			numChars[numRecords] = parseCharLine(currentLine,
+					strlen(currentLine),
+					outBuffer[numRecords]);
+			numRecords++;
+		}
+		
+	}
+	else {
+		numRecords = -1;
+	}
+	
+	fclose(fileHandler);
+
+	return numRecords;
 }
