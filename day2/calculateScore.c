@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 	int totalScore;
 
 	if (argc<2) {
-		printf("countFood fileName\n");
+		printf("calculateScore fileName\n");
 	}   
 	else {
 		/* Allocate */
