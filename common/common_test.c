@@ -3,17 +3,26 @@
 #include <string.h>
 
 int main() {
-	char testStr[] = "100\n";
+	char testStr[] = "100-200,400-500\n";
 	int intArray[100];
 	int intCollection[MAX_FILE_LINES][MAX_FILE_NUMBERS];
 	int numIntCollection[MAX_FILE_LINES];
 	int numInts;
+	char tokens[] = " \n-,";
 
 	char fileName[] = "numbers.txt";
 
 	int i, j;
 
 	numInts = parseIntLine(testStr, strlen(testStr), intArray);
+
+	printf("%d\n", numInts);
+
+	for(i=0; i<numInts; i++) {
+		printf("%d: %d\n", i, intArray[i]);
+	}
+	
+	numInts = parseIntLineToken(testStr, strlen(testStr), intArray, NULL);
 
 	printf("%d\n", numInts);
 

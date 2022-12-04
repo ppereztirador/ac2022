@@ -157,3 +157,55 @@ int parseCharFile(char* fileName, char** outBuffer[MAX_FILE_LINES],
 
 	return numRecords;
 }
+
+int parseIntLineToken(char* line, int length, int* outBuffer, char* tokens) {
+	int i, j = 0;
+	int numInts = 0;
+	char snippet[1000];
+	
+	if (tokens==NULL) return parseIntLine(line, length, outBuffer);
+
+	for (i=0; i<=length; i++) {
+		if (strchr(tokens, line[i]) || i==length) {
+			if (j!=0) {
+				snippet[j] = '\0';
+				outBuffer[numInts] = atoi(snippet);
+				numInts++;
+				j = 0;
+			}
+		}
+		else {
+			snippet[j] = line[i];
+			j++;
+		}
+	}
+
+	return numInts;
+}
+
+int parseIntFileToken(char* fileName, int outBuffer[MAX_FILE_LINES]
+						[MAX_FILE_NUMBERS],
+	       int numInts[MAX_FILE_LINES], char* tokens) {
+	FILE* fileHandler;
+	char currentLine[1000];
+	int numRecords = 0;
+
+	fileHandler = fopen(fileName, "r");
+
+	if (fileHandler!=NULL) {
+		while (fgets(currentLine, 1000, fileHandler) != NULL) {
+			numInts[numRecords] = parseIntLineToken(currentLine,
+					strlen(currentLine),
+					outBuffer[numRecords], tokens);
+			numRecords++;
+		}
+		
+	}
+	else {
+		numRecords = -1;
+	}
+	
+	fclose(fileHandler);
+
+	return numRecords;
+}

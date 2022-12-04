@@ -12,4 +12,7 @@
 
 	int parseCharLine(char* line, int length, char** outBuffer);
 	int parseCharFile(char*, char**[MAX_FILE_LINES], int[MAX_FILE_LINES]);
+	
+	int parseIntLineToken(char*, int, int*, char*);
+	int parseIntFileToken(char*, int[MAX_FILE_LINES][MAX_FILE_NUMBERS], int[MAX_FILE_LINES], char*);
 #endif
