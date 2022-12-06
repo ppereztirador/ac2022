@@ -209,3 +209,85 @@ int parseIntFileToken(char* fileName, int outBuffer[MAX_FILE_LINES]
 
 	return numRecords;
 }
+
+int popChar(char* stack, int num, char* popVals) {
+	int retVal, i;
+	int lenMax = strlen(stack);
+	
+	retVal = 0;
+	for (i=lenMax-num; i<lenMax; i++) {
+		popVals[i-(lenMax-num)] = stack[i];
+		stack[i] = '\0';
+		retVal++;
+	}
+	popVals[num] = '\0';
+
+	return retVal;
+}
+
+void pushChar(char* stack, char* pushVals) {
+	strcat(stack, pushVals);
+}
+
+int parseCharLineSpaces(char* line, int length, char** outBuffer, int maxSpaces) {
+	int i, j = 0;
+	int numChars = 0;
+	char snippet[1000];
+	int numSpaces = 0;
+
+	for (i=0; i<=length; i++) {
+		//printf("[%d]:%c   ", i, line[i]);
+		//printf("numSpaces: %d\n", numSpaces);
+		if (line[i]==' ' || line[i]=='\n' || i==length) {
+			if (j!=0) {
+				snippet[j] = '\0';
+				strcpy(outBuffer[numChars], snippet);
+				numChars++;
+				j = 0;
+				numSpaces = 0;
+				//printf("SAVE! %s\n", snippet);
+			}
+			else if (line[i]==' ') {
+				numSpaces++;
+				if (numSpaces==maxSpaces+1) {
+					strcpy(outBuffer[numChars], "");
+					numChars++;
+					numSpaces = 0;
+					//printf("SAVE! %s\n", "");
+				}
+			}
+		}
+		else {
+			snippet[j] = line[i];
+			j++;
+		}
+	}
+
+	return numChars;
+}
+
+int parseCharFileSpaces(char* fileName, char** outBuffer[MAX_FILE_LINES],
+	       int numChars[MAX_FILE_LINES], int maxSpaces) {
+	FILE* fileHandler;
+	char currentLine[1000];
+	int numRecords = 0;
+
+	fileHandler = fopen(fileName, "r");
+
+	if (fileHandler!=NULL) {
+		while (fgets(currentLine, 1000, fileHandler) != NULL) {
+			numChars[numRecords] = parseCharLineSpaces(currentLine,
+					strlen(currentLine),
+					outBuffer[numRecords], maxSpaces);
+			numRecords++;
+		}
+		
+	}
+	else {
+		numRecords = -1;
+	}
+	
+	fclose(fileHandler);
+
+	return numRecords;
+}
