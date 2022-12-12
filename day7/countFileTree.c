@@ -21,30 +21,57 @@ int sortCommand(char** command) {
 		commandType = 3;
 	}
 	else {
-		commandType = 0;
+		commandType = 4;
 	}
 
 	return commandType;
 }
 
-int executeCommand(char** command, fileNode* currentDir, int numNodes) {
+fileNode* executeCommand(char** command, fileNode* currentDir, int* numNodes) {
 	int i;
+	fileNode* retVal = NULL;
+	char dirName[50];
 	int commandType = sortCommand(command);
+	fileNode tempNode;
 
 	switch (commandType) {
-		case 0:
-			break;
 		case 1:
+			strcpy(dirName, command[2]);
+			i = findFile(currentDir, *(numNodes), dirName);
+			if (i==-2) {
+				retVal = currentDir[0].parent;
+			}
 			break;
 		case 2:
+			retVal = NULL;
 			break;
 		case 3:
+			/* Directory */
+			strcpy(tempNode.name, command[1]);
+			tempNode.size = 0;
+			tempNode.numNodes = 0;
+			tempNode.child = NULL;
+			/* Leave parent to later init */
+
+			retVal = addNode(currentDir, *(numNodes), &tempNode);
+			break;
+		case 4:
+			/* File with size */
+			strcpy(tempNode.name, command[1]);
+			tempNode.size = atoi(command[0]);
+			tempNode.numNodes = 0;
+			tempNode.child = NULL;
+			/* Leave parent to later init */
+			
+			retVal = addNode(currentDir, *(numNodes), &tempNode);
 			break;
 		case default:
 			/* Shouldn't be reached with contest commands */
 			printf("COMMAND ERROR\n");
 			break;
 	}
+
+	return retVal;
 }
 int main(int argc, char* argv[]) {
 	char fileName[1000];

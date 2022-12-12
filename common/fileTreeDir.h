@@ -1,16 +1,23 @@
 #ifndef FILETREE_H
 #define FILETREE_H
 	typedef struct fileNode fileNode;
+	typedef struct fileDir fileDir;
 	
 	struct fileNode {
 		char name[50];
-		fileNode* parent;
-		fileNode* child;
+		fileDir* parent;
+		fileDir* child;
 		int size;
-		int numNodes;
 	};
 
+	struct fileDir {
+		fileNode* listNodes;
+		int numNodes;
+	}
+
 	fileNode* createFileNodeList(int);
+	fileDir createFileDir(int);
+
 	void initFileNodeList(fileNode*, int, fileNode*);
 	void freeFileNodeList(fileNode*, int);
 	void printFile(fileNode*);

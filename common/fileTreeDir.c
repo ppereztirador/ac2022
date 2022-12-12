@@ -1,13 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "fileTree.h"
+#include "fileTreeDir.h"
 
 fileNode* createFileNodeList(int numNodes) {
 	fileNode* retFile;
 	retFile = (fileNode*) calloc(numNodes, sizeof(fileNode));
 
 	return retFile;
+}
+
+fileDir createFileDir(int numNodes) {
+	fileDir retDir;
+	retDir.listNodes = createFileNodeList(numNodes);
+
+	return fileDir;
 }
 
 void initFileNodeList(fileNode* fn, int numNodes, fileNode* parent) {
