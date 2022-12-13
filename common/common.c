@@ -14,7 +14,7 @@ char** allocStringArray(int numStrings) {
 	}
 	else {
 		for (i=0; i<numStrings; i++) {
-			retArray[i] = (char*) calloc(50, sizeof(char));
+			retArray[i] = (char*) calloc(100, sizeof(char));
 			if (retArray[i]==NULL) {
 				printf("ERROR ALLOCATING STRING\n");
 				freeStringArray(retArray, numStrings);
