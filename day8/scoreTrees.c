@@ -21,36 +21,39 @@ int scoreTrees(char*** trees, int numRows, int numCols, int x, int y) {
 	
 	/* Search right */
 	i = x;
-	dirVal = 1;
+	dirVal = 0;
 	for (j=y+1; j<numCols; j++) {
+		dirVal++;
 		if (trees[i][0][j]>=trees[x][0][y]) {
 			dirVal = 0;
 			break;
 		}
 	}
-	dirVisible += dirVal;
+	dirVisible *= dirVal;
 
 	/* Search up */
 	j = y;
-	dirVal = 1;
+	dirVal = 0;
 	for (i=x-1; i>=0; i--) {
+		dirVal++;
 		if (trees[i][0][j]>=trees[x][0][y]) {
 			dirVal = 0;
 			break;
 		}
 	}
-	dirVisible += dirVal;
+	dirVisible *= dirVal;
 
 	/* Search down */
 	j = y;
-	dirVal = 1;
+	dirVal = 0;
 	for (i=x+1; i<numRows; i++) {
+		dirVal++;
 		if (trees[i][0][j]>=trees[x][0][y]) {
 			dirVal = 0;
 			break;
 		}
 	}
-	dirVisible += dirVal;
+	dirVisible *= dirVal;
 
 	return dirVisible;
 }
@@ -86,9 +89,7 @@ int main(int argc, char* argv[]) {
 		for (i=0; i<numRows; i++) {
 			for (j=0; j<numCols; j++) {
 				//printf("%c ", strList[i][0][j]);
-				if (scoreTrees(strList, numRows, numCols, i, j)) {
-					totalScore ++;
-				}
+				printf("%d,%d: %d\n",i,j,scoreTrees(strList, numRows, numCols, i, j)); 
 			}
 			//printf("\n");
 		}
