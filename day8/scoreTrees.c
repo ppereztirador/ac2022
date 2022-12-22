@@ -7,7 +7,7 @@ int scoreTrees(char*** trees, int numRows, int numCols, int x, int y) {
 	int i, j;
 	int dirVisible, dirVal;
 	
-	dirVisible = 0;
+	dirVisible = 1;
 	/* Search left */
 	i = x;
 	dirVal = 0;
@@ -25,7 +25,6 @@ int scoreTrees(char*** trees, int numRows, int numCols, int x, int y) {
 	for (j=y+1; j<numCols; j++) {
 		dirVal++;
 		if (trees[i][0][j]>=trees[x][0][y]) {
-			dirVal = 0;
 			break;
 		}
 	}
@@ -37,7 +36,6 @@ int scoreTrees(char*** trees, int numRows, int numCols, int x, int y) {
 	for (i=x-1; i>=0; i--) {
 		dirVal++;
 		if (trees[i][0][j]>=trees[x][0][y]) {
-			dirVal = 0;
 			break;
 		}
 	}
@@ -49,7 +47,6 @@ int scoreTrees(char*** trees, int numRows, int numCols, int x, int y) {
 	for (i=x+1; i<numRows; i++) {
 		dirVal++;
 		if (trees[i][0][j]>=trees[x][0][y]) {
-			dirVal = 0;
 			break;
 		}
 	}
@@ -68,7 +65,7 @@ int main(int argc, char* argv[]) {
 	
 	int numRows, numCols;
 	int forest[100][100];
-	int totalScore;
+	int totalScore, score;
 
 	if (argc<2) {
 		printf("countTrees fileName\n");
@@ -88,13 +85,14 @@ int main(int argc, char* argv[]) {
 		totalScore = 0;
 		for (i=0; i<numRows; i++) {
 			for (j=0; j<numCols; j++) {
-				//printf("%c ", strList[i][0][j]);
-				printf("%d,%d: %d\n",i,j,scoreTrees(strList, numRows, numCols, i, j)); 
+				score = scoreTrees(strList, numRows, numCols, i, j);
+				if (score>totalScore) {
+					totalScore = score;
+				}
 			}
-			//printf("\n");
 		}
 
-		printf("Num visible trees: %d\n", totalScore);
+		printf("Best score: %d\n", totalScore);
 
 		/* Free */
 		for (i=0; i<MAX_FILE_LINES; i++) {
