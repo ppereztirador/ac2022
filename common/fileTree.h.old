@@ -6,18 +6,17 @@
 		char name[50];
 		fileNode* parent;
 		fileNode* child;
-		int next;
+		fileNode* next;
 		int size;
 		int numNodes;
 	};
 
 	fileNode* createFileNodeList(int);
-	void initFileNodeList(fileNode*, fileNode*);
-	void freeFileNodeList(fileNode*);
+	void initFileNodeList(fileNode*, int, fileNode*);
+	void freeFileNodeList(fileNode*, int);
 	void printFile(fileNode*);
 	void addChild(fileNode*, int, fileNode*, int);
-	int updateFileSizes(fileNode*);
-	fileNode* addNode(fileNode*, fileNode*);
-	int findFile(fileNode*, char[]);
-	int countNodes(fileNode*);
+	int updateFileSizes(fileNode*, int);
+	fileNode* addNode(fileNode*, int, fileNode*);
+	int findFile(fileNode*, int, char[]);
 #endif

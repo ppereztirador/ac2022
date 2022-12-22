@@ -10,7 +10,7 @@ int main() {
 
 	fn = createFileNodeList(3);
 	fn2 = createFileNodeList(5);
-	fnEmpty = createFileNodeList(1);
+	fnEmpty = createFileNodeList(0);
 
 	strcpy(fn3.name, "NEW");
 	fn3.parent = NULL;
@@ -18,8 +18,8 @@ int main() {
 	fn3.numNodes = 0;
 	fn3.size = 123;
 
-	initFileNodeList(fn, NULL);
-	initFileNodeList(fn2, NULL);
+	initFileNodeList(fn, 3, NULL);
+	initFileNodeList(fn2, 5, NULL);
 
 	strcpy(fn[0].name, "a");
 		fn[0].size = 1;
@@ -40,21 +40,20 @@ int main() {
 
 	addChild(fn, 1, fn2, 5);
 	printf("**Before adding: %p\n", fn);
-	fn = addNode(fn, &fn3);
+	fn = addNode(fn, 3, &fn3);
 	printf("**After adding: %p\n", fn);
 
+	fnEmpty = addNode(fnEmpty, 0, &fn3);
+	
 	for (i=0; i<4; i++) {
 		printFile(&fn[i]);
 	}
 
-	printf("Before adding to empty list: %p, %d\n", fnEmpty, countNodes(fnEmpty));
-	fnEmpty = addNode(fnEmpty, &fn3);
 	printf("empty list\n");
 	printFile(&fnEmpty[0]);
-	printFile(&fnEmpty[1]);
 	printf("********\n");
 
-	t = updateFileSizes(fn);
+	t = updateFileSizes(fn, 4);
 	
 	for (i=0; i<4; i++) {
 		printFile(&fn[i]);
@@ -63,11 +62,11 @@ int main() {
 	printf("Total Size: %d\n", t);
 
 	/* Find files */
-	i = findFile(fn, findName);
+	i = findFile(fn, 4, findName);
 	printf("Found file %s at position %i\n", findName, i);
 
 	printf("**************\n");
-	freeFileNodeList(fn);
-	freeFileNodeList(fnEmpty);
+	freeFileNodeList(fn, 4);
+	freeFileNodeList(fnEmpty, 1);
 	return 0;
 }
